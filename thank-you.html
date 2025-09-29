@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You - ON-EAR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#292C77">
+  <style>
+    :root { --blue:#292C77; --yellow:#F9A030; --ink:#11131a; --muted:#5f667a; --bg:#ffffff; --soft:#f7f8fb; --border:#e8eaf1; --radius:18px; --shadow:0 8px 24px rgba(17,19,26,0.06); --shadow-strong:0 16px 42px rgba(17,19,26,0.10); --gradient:linear-gradient(135deg,#292C77 0%,#F9A030 100%); }
+    *{box-sizing:border-box;} html,body{height:100%;}
+    body{margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:radial-gradient(1200px 600px at 10% -10%, #eef0ff 0%, transparent 55%),radial-gradient(900px 500px at 110% 0%, #fff6e6 0%, transparent 60%),var(--bg);}  
+    .container{width:min(900px,92vw);margin:0 auto;position:relative;z-index:1;}
+    header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);transition:box-shadow .2s ease;}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px;}
+    .branding{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;}
+    .logo img{height:56px;width:auto;display:block;border-radius:10px;box-shadow:0 4px 14px rgba(17,19,26,0.08);}
+    .title{display:grid;} .title .name{font-weight:800;letter-spacing:.2px;font-size:1.55rem;line-height:1.05;} .on{color:var(--blue);} .ear{color:var(--yellow);} .tag{color:var(--muted);font-size:.95rem;}
+    nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap;} nav a{position:relative;text-decoration:none;color:var(--blue);font-weight:600;padding:10px 14px;border-radius:12px;} nav a::after{content:"";position:absolute;left:50%;right:50%;bottom:6px;height:2px;background:var(--gradient);transition:left .2s,right .2s;} nav a:hover{background:#eef0ff;} nav a:hover::after,nav a.active::after{left:14px;right:14px;}
+    .progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--gradient);z-index:60;box-shadow:0 2px 20px rgba(249,160,48,0.25);}    
+    main{padding:90px 0 100px;}
+    .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:54px 50px;text-align:center;box-shadow:var(--shadow);} .card h1{margin:0 0 10px;font-size:clamp(2.1rem,5vw,2.8rem);color:var(--blue);} .card h2{margin:0 0 14px;font-size:1.5rem;color:#2b3150;} .card p{margin:0 0 18px;font-size:1.05rem;color:#2b3150;line-height:1.55;}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--border);cursor:pointer;padding:15px 26px;border-radius:14px;font-weight:700;font-size:1rem;text-decoration:none;transition:transform 120ms ease,box-shadow 200ms ease,filter 120ms ease;}
+    .btn-primary{background:#F9A030;color:#1a1a1a;box-shadow:var(--shadow);} .btn-primary:hover{background:#e18d00;transform:translateY(-1px);box-shadow:var(--shadow-strong);}    
+    footer{text-align:center;color:#677084;padding:50px 1rem 70px;font-size:.9rem;border-top:1px solid var(--border);background:#fff;}
+    @media(max-width:640px){.card{padding:42px 30px;} .title .name{font-size:1.4rem;} .logo img{height:50px;} }
+  </style>
+</head>
+<body>
+  <div id="progress" class="progress" aria-hidden="true"></div>
+  <header>
+    <div class="container header-inner">
+      <a href="index.html" class="branding" aria-label="ON-EAR home">
+        <div class="logo"><img src="Logo_v3.png" alt="ON-EAR logo"></div>
+        <div class="title"><div class="name"><span class="on">ON-</span><span class="ear">EAR</span></div><div class="tag">Ontario Network for Emerging Auditory Research</div></div>
+      </a>
+      <nav aria-label="Primary">
+        <a href="index.html#about">About</a>
+        <a href="index.html#event">Event</a>
+        <a href="program.html">Program</a>
+        <a href="index.html#register">Register</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="container">
+      <article class="card">
+        <h1>Thank you!</h1>
+        <h2>Registration received</h2>
+        <p>Your submission has been recorded.</p>
+        <p style="margin-top:-4px;">If you need to make a change, just email <a href="mailto:tmarc@torontomu.ca" style="color:var(--blue);text-decoration:underline;">tmarc@torontomu.ca</a>.</p>
+        <a href="index.html" class="btn btn-primary" style="margin-top:10px;">Return to site</a>
+      </article>
+    </div>
+  </main>
+  <footer>
+    <div class="container">&copy; 2025 ON-EAR. All rights reserved.</div>
+  </footer>
+  <script>
+    const progress=document.getElementById('progress');const headerEl=document.querySelector('header');window.addEventListener('scroll',()=>{const st=document.documentElement.scrollTop||document.body.scrollTop;const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;progress.style.width=Math.min(100,(st/h)*100)+'%';headerEl.style.boxShadow=st>6?'0 6px 24px rgba(17,19,26,0.08)':'none';});
+  </script>
+</body>
+</html>

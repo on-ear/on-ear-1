@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- redesign to match index2 -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - ON-EAR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#292C77">
+  <style>
+    :root { --blue:#292C77; --yellow:#F9A030; --ink:#11131a; --muted:#5f667a; --bg:#ffffff; --soft:#f7f8fb; --border:#e8eaf1; --radius:18px; --shadow:0 8px 24px rgba(17,19,26,0.06); --shadow-strong:0 16px 42px rgba(17,19,26,0.10); --gradient:linear-gradient(135deg,#292C77 0%,#F9A030 100%); }
+    *{box-sizing:border-box;} html,body{height:100%;}
+    body{margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:radial-gradient(1200px 600px at 10% -10%, #eef0ff 0%, transparent 55%),radial-gradient(900px 500px at 110% 0%, #fff6e6 0%, transparent 60%),var(--bg);}
+    .container{width:min(1100px,92vw);margin:0 auto;position:relative;z-index:1;}
+    header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);transition:box-shadow .2s ease;}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px;}
+    .branding{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;}
+    .logo img{height:56px;width:auto;display:block;border-radius:10px;box-shadow:0 4px 14px rgba(17,19,26,0.08);}
+    .title{display:grid;}
+    .title .name{font-weight:800;letter-spacing:.2px;font-size:1.55rem;line-height:1.05;}
+    .on{color:var(--blue);} .ear{color:var(--yellow);} .tag{color:var(--muted);font-size:.95rem;}
+    nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+    nav a{position:relative;text-decoration:none;color:var(--blue);font-weight:600;padding:10px 14px;border-radius:12px;}
+    nav a::after{content:"";position:absolute;left:50%;right:50%;bottom:6px;height:2px;background:var(--gradient);transition:left .2s,right .2s;}
+    nav a:hover{background:#eef0ff;} nav a:hover::after,nav a.active::after{left:14px;right:14px;}
+    .progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--gradient);z-index:60;box-shadow:0 2px 20px rgba(249,160,48,0.25);}
+    main{padding:70px 0 90px;}
+    .grid{display:grid;gap:40px;}
+    .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:40px;box-shadow:var(--shadow);} .card h1{margin:0 0 8px;font-size:clamp(2rem,4vw,2.6rem);color:var(--blue);} .card p.lede{margin:0 0 26px;font-size:1.05rem;color:#2b3150;line-height:1.55;}
+    form .row{display:grid;gap:22px;margin-bottom:26px;} @media(min-width:680px){form .row.two{grid-template-columns:1fr 1fr;}}
+    .form-group{display:flex;flex-direction:column;gap:8px;}
+    label{font-weight:600;font-size:.95rem;color:var(--ink);} .form-group small{color:var(--muted);font-size:.75rem;}
+    input,select,textarea{border:1px solid var(--border);background:#fff;padding:13px 14px;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;transition:border-color .2s,box-shadow .2s;} input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px #292C771A;}
+    textarea{resize:vertical;min-height:90px;}
+    .info-text{background:var(--soft);border:1px solid var(--border);padding:14px 16px;border-radius:12px;font-size:.88rem;line-height:1.5;color:#2b3150;}
+    .toggle-area{margin-top:10px;}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--border);cursor:pointer;padding:15px 22px;border-radius:14px;font-weight:700;font-size:1rem;text-decoration:none;transition:transform 120ms ease,box-shadow 200ms ease,filter 120ms ease;width:100%;}
+    .btn-primary{background:#F9A030;color:#1a1a1a;box-shadow:var(--shadow);} .btn-primary:hover{background:#e18d00;transform:translateY(-1px);box-shadow:var(--shadow-strong);} 
+    .back-link{text-align:center;display:block;margin-top:24px;color:var(--blue);font-weight:600;text-decoration:none;font-size:.95rem;} .back-link:hover{text-decoration:underline;}
+    footer{text-align:center;color:#677084;padding:46px 1rem 60px;font-size:.9rem;border-top:1px solid var(--border);background:#fff;}
+    @media(max-width:640px){.card{padding:30px 24px;} .title .name{font-size:1.4rem;} .logo img{height:50px;} }
+  </style>
+</head>
+<body>
+  <div id="progress" class="progress" aria-hidden="true"></div>
+  <header>
+    <div class="container header-inner">
+      <a href="index.html" class="branding" aria-label="ON-EAR home">
+        <div class="logo"><img src="Logo_v3.png" alt="ON-EAR logo"></div>
+        <div class="title"><div class="name"><span class="on">ON-</span><span class="ear">EAR</span></div><div class="tag">Ontario Network for Emerging Auditory Research</div></div>
+      </a>
+      <nav aria-label="Primary">
+        <a href="index.html#about">About</a>
+        <a href="index.html#event">Event</a>
+        <a href="program.html">Program</a>
+        <a href="index.html#register">Register</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="container grid">
+      <article class="card">
+        <h1>Register for ON-EAR 2025</h1>
+        <p class="lede">Join Ontario's auditory research community. Please provide your details below. If you intend to give a talk or present a poster, include a tentative title now (no abstract required).</p>
+        <form action="https://formspree.io/f/xdkdlybw" method="POST" onsubmit="submitForm(event)">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_subject" value="New ON-EAR Registration">
+          <div class="row two">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+          </div>
+          <div class="row two">
+            <div class="form-group">
+              <label for="institution">Institution *</label>
+              <input type="text" id="institution" name="institution" required>
+            </div>
+            <div class="form-group">
+              <label for="role">Role *</label>
+              <select id="role" name="role" required>
+                <option value="">Select your role</option>
+                <option value="faculty">Faculty</option>
+                <option value="postdoc">Postdoc</option>
+                <option value="graduate">Graduate Student</option>
+                <option value="undergraduate">Undergraduate Student</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="row two">
+            <div class="form-group">
+              <label for="presentation">Planning to present? *</label>
+              <select id="presentation" name="presentation" required>
+                <option value="">Select an option</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+            <!-- placeholder column kept for layout balance -->
+            <div class="form-group" aria-hidden="true"></div>
+          </div>
+          <!-- Restored detailed info blocks -->
+          <div class="form-group" id="presentationInfo" style="display:none;">
+            <div id="facultyPostdocInfo" style="display:none;">
+              <p class="info-text">We anticipate having space for approximately 12 research talks. Talks will be prioritized for researchers, though if space allows, a few students may be contacted to present a talk. If we receive more submissions than we can accommodate, we may need to prioritize based on fit with the conference theme and balance across institutions. At this stage, no abstract is required, but we may reach out later to request a short description for the event program.</p>
+              <label for="talkTitle">Tentative Title of Your Talk *</label>
+              <input type="text" id="talkTitle" name="talkTitle">
+            </div>
+            <div id="studentInfo" style="display:none;">
+              <p class="info-text">We anticipate having space for approximately 20 posters. Posters will primarily be allocated to students. If we receive more submissions than we can accommodate, we may need to prioritize based on fit with the conference theme and balance across institutions. At this stage, no abstract is required, but we may contact you later to provide a short description for the event program.</p>
+              <label for="posterTitle">Tentative Title of Your Poster *</label>
+              <input type="text" id="posterTitle" name="posterTitle">
+            </div>
+          </div>
+          <div class="row two">
+            <div class="form-group">
+              <label for="dietary">Dietary Restrictions</label>
+              <textarea id="dietary" name="dietary" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="accessibility">Accessibility Needs</label>
+              <textarea id="accessibility" name="accessibility" rows="2"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:8px;">
+              <input type="checkbox" id="mailingList" name="mailingList" style="width:auto;"> Join the ON-EAR mailing list for future updates
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Submit Registration</button>
+          <a href="index.html" class="back-link">← Back to site</a>
+        </form>
+      </article>
+    </div>
+  </main>
+  <footer>
+    <div class="container">&copy; 2025 ON-EAR. All rights reserved.</div>
+  </footer>
+  <script>
+    const progress=document.getElementById('progress');const headerEl=document.querySelector('header');window.addEventListener('scroll',()=>{const st=document.documentElement.scrollTop||document.body.scrollTop;const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;progress.style.width=Math.min(100,(st/h)*100)+'%';headerEl.style.boxShadow=st>6?'0 6px 24px rgba(17,19,26,0.08)':'none';});
+    // Restore original questionnaire logic with detailed text blocks
+    const role=document.getElementById('role');
+    const presentation=document.getElementById('presentation');
+    const presentationInfo=document.getElementById('presentationInfo');
+    const facultyPostdocInfo=document.getElementById('facultyPostdocInfo');
+    const studentInfo=document.getElementById('studentInfo');
+    const talkTitle=document.getElementById('talkTitle');
+    const posterTitle=document.getElementById('posterTitle');
+    function updatePresentation(){const r=role.value;const presenting=presentation.value==='yes';presentationInfo.style.display=presenting?'block':'none';if(presenting){if(r==='faculty'||r==='postdoc'){facultyPostdocInfo.style.display='block';studentInfo.style.display='none';talkTitle.required=true;posterTitle.required=false;}else{facultyPostdocInfo.style.display='none';studentInfo.style.display='block';talkTitle.required=false;posterTitle.required=true;}}else{facultyPostdocInfo.style.display='none';studentInfo.style.display='none';talkTitle.required=false;posterTitle.required=false;}}
+    role.addEventListener('change',updatePresentation);presentation.addEventListener('change',updatePresentation);
+    function submitForm(e){e.preventDefault();const form=e.target;const data=new FormData(form);fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}}).then(r=>{if(r.ok){window.location.href='thank-you.html';}else{throw new Error('Form submission failed');}}).catch(()=>{alert('Sorry, there was an error submitting your registration. Please try again.');});}
+  </script>
+</body>
+</html>

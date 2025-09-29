@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ON-EAR 2025 - Program Schedule</title>
+  <style>
+    :root {
+      --blue: #292C77;
+      --yellow: #F9A030;
+      --ink: #11131a;
+      --muted: #5f667a;
+      --bg: #ffffff;
+      --soft: #f7f8fb;
+      --border: #e8eaf1;
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(17,19,26,0.06);
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Arial', sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.4;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: var(--blue);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .title {
+      text-align: left;
+    }
+
+    .title .name {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .on { color: var(--blue); }
+    .ear { color: var(--yellow); }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 4px 0 0 0;
+      font-weight: 600;
+    }
+
+    .event-info {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .event-info h2 {
+      margin: 0 0 8px 0;
+      color: var(--blue);
+      font-size: 1.4rem;
+    }
+
+    .event-details {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* Schedule */
+    .schedule-section {
+      margin: 25px 0;
+    }
+
+    .section-title {
+      background: var(--blue);
+      color: white;
+      padding: 12px 16px;
+      margin: 0 0 2px 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .time-block {
+      display: flex;
+      border: 1px solid var(--border);
+      border-top: none;
+      background: white;
+    }
+
+    .time-block:last-child {
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+
+    .time {
+      background: var(--soft);
+      padding: 12px 16px;
+      min-width: 120px;
+      font-weight: 700;
+      color: var(--blue);
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+    }
+
+    .activity {
+      padding: 12px 16px;
+      flex: 1;
+    }
+
+    .activity-title {
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .activity-details {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .speaker {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .break-activity {
+      background: #fffbe7;
+      border-left: 4px solid var(--yellow);
+    }
+
+    .poster-session {
+      background: #f0f8ff;
+      border-left: 4px solid var(--blue);
+    }
+
+    /* Awards section */
+    .awards-info {
+      background: #e8f5e8;
+      border: 2px solid #4caf50;
+      border-radius: var(--radius);
+      padding: 16px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .awards-info h3 {
+      color: #1b5e20;
+      margin: 0 0 8px 0;
+      font-size: 1.2rem;
+    }
+
+    .awards-info p {
+      color: #2d5f2d;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    /* Print styles */
+    @media print {
+      body { 
+        padding: 15px;
+        font-size: 11pt;
+        line-height: 1.3;
+      }
+      
+      .container {
+        max-width: none;
+      }
+      
+      .schedule-section {
+        page-break-inside: avoid;
+        margin: 20px 0;
+      }
+      
+      .time-block {
+        page-break-inside: avoid;
+      }
+      
+      .header {
+        margin-bottom: 20px;
+      }
+      
+      .logo-title .logo {
+        width: 50px;
+        height: 50px;
+        font-size: 12px;
+      }
+      
+      .title .name {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .logo-title {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .title {
+        text-align: center;
+      }
+      
+      .time-block {
+        flex-direction: column;
+      }
+      
+      .time {
+        min-width: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo-title">
+        <div class="logo">LOGO</div>
+        <div class="title">
+          <h1 class="name"><span class="on">ON-</span><span class="ear">EAR</span></h1>
+          <p class="subtitle">Ontario Network for Emerging Auditory Research</p>
+        </div>
+      </div>
+      
+      <div class="event-info">
+        <h2>2025 Research Presentation Day</h2>
+        <div class="event-details">
+          <strong>December 5, 2025</strong> • Centre for Urban Innovation, Toronto Metropolitan University<br>
+          <em>Auditory Neuroscience Today: Sound, Speech, and the Brain</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- Morning Session -->
+    <div class="schedule-section">
+      <h2 class="section-title">Morning Session</h2>
+      
+      <div class="time-block">
+        <div class="time">8:30 - 9:00</div>
+        <div class="activity break-activity">
+          <div class="activity-title">Registration & Coffee</div>
+          <div class="activity-details">Welcome coffee and registration check-in</div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">9:00 - 9:15</div>
+        <div class="activity">
+          <div class="activity-title">Welcome & Opening Remarks</div>
+          <div class="activity-details">TMARC organizers</div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">9:15 - 9:35</div>
+        <div class="activity">
+          <div class="activity-title">Keynote Talk 1</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">9:35 - 9:55</div>
+        <div class="activity">
+          <div class="activity-title">Faculty Talk 1</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">9:55 - 10:15</div>
+        <div class="activity">
+          <div class="activity-title">Faculty Talk 2</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">10:15 - 10:45</div>
+        <div class="activity break-activity">
+          <div class="activity-title">Coffee Break</div>
+          <div class="activity-details">Networking and refreshments</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Late Morning Session -->
+    <div class="schedule-section">
+      <h2 class="section-title">Late Morning Session</h2>
+      
+      <div class="time-block">
+        <div class="time">10:45 - 11:05</div>
+        <div class="activity">
+          <div class="activity-title">Postdoc Talk 1</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">11:05 - 11:25</div>
+        <div class="activity">
+          <div class="activity-title">Postdoc Talk 2</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">11:25 - 11:45</div>
+        <div class="activity">
+          <div class="activity-title">Faculty Talk 3</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">11:45 - 12:45</div>
+        <div class="activity poster-session">
+          <div class="activity-title">Poster Session & Lunch</div>
+          <div class="activity-details">Student and trainee poster presentations with lunch provided</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Afternoon Session -->
+    <div class="schedule-section">
+      <h2 class="section-title">Afternoon Session</h2>
+      
+      <div class="time-block">
+        <div class="time">12:45 - 1:05</div>
+        <div class="activity">
+          <div class="activity-title">Keynote Talk 2</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">1:05 - 1:25</div>
+        <div class="activity">
+          <div class="activity-title">Faculty Talk 4</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">1:25 - 1:45</div>
+        <div class="activity">
+          <div class="activity-title">Postdoc Talk 3</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">1:45 - 2:15</div>
+        <div class="activity break-activity">
+          <div class="activity-title">Afternoon Break</div>
+          <div class="activity-details">Coffee and networking</div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">2:15 - 2:35</div>
+        <div class="activity">
+          <div class="activity-title">Faculty Talk 5</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">2:35 - 2:55</div>
+        <div class="activity">
+          <div class="activity-title">Postdoc Talk 4</div>
+          <div class="activity-details">
+            <span class="speaker">[Speaker Name]</span> - Title of presentation<br>
+            <em>[Institution]</em>
+          </div>
+        </div>
+      </div>
+      
+      <div class="time-block">
+        <div class="time">2:55 - 3:15</div>
+        <div class="activity">
+          <div class="activity-title">Awards & Closing Remarks</div>
+          <div class="activity-details">Poster awards presentation and closing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Awards Information -->
+    <div class="awards-info">
+      <h3>Poster Awards</h3>
+      <p>Best poster presentations will be recognized with awards during the closing ceremony.</p>
+    </div>
+
+    <!-- Footer info -->
+    <div style="text-align: center; margin-top: 30px; padding: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem;">
+      <p><strong>Contact:</strong> tmarc@torontomu.ca</p>
+      <p>© 2025 ON-EAR. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>

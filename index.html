@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ON-EAR | Ontario Network for Emerging Auditory Research</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#292C77">
+  <style>
+    :root {
+      --blue: #292C77;
+      --yellow: #F9A030;
+      --ink: #11131a;
+      --muted: #5f667a;
+      --bg: #ffffff;
+      --soft: #f7f8fb;
+      --border: #e8eaf1;
+      --radius: 18px;
+      --shadow: 0 8px 24px rgba(17,19,26,0.06);
+      --shadow-strong: 0 16px 42px rgba(17,19,26,0.10);
+      --gradient: linear-gradient(135deg, #292C77 0%, #F9A030 100%);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, #eef0ff 0%, transparent 55%),
+        radial-gradient(900px 500px at 110% 0%, #fff6e6 0%, transparent 60%),
+        var(--bg);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .container { width: min(1200px, 92vw); margin: 0 auto; position: relative; z-index: 1; }
+
+    /* Header */
+    header { position: sticky; top: 0; z-index: 40; background: rgba(255,255,255,0.94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); transition: box-shadow .2s ease; }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 12px; }
+    .branding { display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit; }
+    .logo img { height: 56px; width: auto; display: block; border-radius: 10px; box-shadow: 0 4px 14px rgba(17,19,26,0.08); }
+    .title { display: grid; }
+    .title .name { font-weight: 800; letter-spacing: .2px; font-size: 1.55rem; line-height: 1.05; }
+    .on { color: var(--blue); }
+    .ear { color: var(--yellow); }
+    .tag { color: var(--muted); font-size: .95rem; }
+
+    nav { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    nav a { position: relative; text-decoration: none; color: var(--blue); font-weight: 600; padding: 10px 14px; border-radius: 12px; }
+    nav a::after { content: ""; position: absolute; left: 50%; right: 50%; bottom: 6px; height: 2px; background: var(--gradient); transition: left .2s, right .2s; }
+    nav a:hover { background: #eef0ff; }
+    nav a:hover::after { left: 14px; right: 14px; }
+    nav a.active::after { left: 14px; right: 14px; }
+
+    /* Progress */
+    .progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--gradient); z-index: 60; box-shadow: 0 2px 20px rgba(249,160,48,0.25); }
+
+    /* Hero */
+    .hero { position: relative; padding: 92px 0 72px; text-align: center; background: #fff; overflow: hidden; }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(2.4rem, 4.8vw, 3.4rem); letter-spacing: -0.3px; color: var(--blue); }
+    .hero .lede { font-size: clamp(1rem, 1.6vw, 1.2rem); max-width: 820px; margin: .5rem auto 1.6rem; color: #2b3150; }
+    .pill { display: inline-block; padding: 8px 12px; border: 1px solid var(--border); border-radius: 999px; background: #fff; font-weight: 700; font-size: .9rem; color: var(--blue); }
+
+    /* Animated audio wave behind title */
+    .audiowave { position: absolute; top: 42%; left: 50%; transform: translate(-50%, -50%); width: min(1000px, 92vw); height: 160px; pointer-events: none; opacity: .35; }
+    .audiowave path { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 10 10; animation: waveDash 7s linear infinite; }
+    @keyframes waveDash { to { stroke-dashoffset: -200; } }
+
+    .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--border); cursor: pointer; padding: 13px 18px; border-radius: 14px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: transform 120ms ease, box-shadow 200ms ease, filter 120ms ease; }
+    .btn-primary { background: #F9A030; color: #1a1a1a; box-shadow: var(--shadow); }
+    .btn-primary:hover { background: #e18d00; transform: translateY(-1px); box-shadow: var(--shadow-strong); filter: none; }
+    .btn-ghost { background: #fff; color: var(--blue); box-shadow: var(--shadow); }
+    .btn-ghost:hover { transform: translateY(-1px); box-shadow: var(--shadow-strong); }
+
+    .quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+    .chip { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; text-align: left; color: #2b3150; box-shadow: 0 4px 16px rgba(17,19,26,0.06); }
+    .chip strong { color: var(--blue); }
+
+    .hero-divider { position: absolute; inset: auto 0 -1px 0; height: 110px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="%23292C77"/><stop offset="100%" stop-color="%23F9A030"/></linearGradient></defs><path fill="%23ffffff" d="M0,192L48,186.7C96,181,192,171,288,170.7C384,171,480,181,576,181.3C672,181,768,171,864,149.3C960,128,1056,96,1152,85.3C1248,75,1344,85,1392,90.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/><path d="M0 210 C 200 140, 400 280, 600 200 S 1000 140, 1440 220" stroke="url(%23g)" stroke-width="3" fill="none" opacity="0.25"/></svg>') bottom center / cover no-repeat; }
+
+    /* Sections */
+    section.block { padding: 70px 0; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .card { position: relative; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; color: #2b3150; box-shadow: var(--shadow); overflow: hidden; }
+    .card h2 { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: clamp(1.6rem, 2.8vw, 2rem); color: var(--blue); }
+    .card h2::before { content: ""; height: 10px; width: 28px; border-radius: 6px; background: var(--gradient); }
+    .card p { font-size: 1.06rem; line-height: 1.75; }
+
+    /* Footer */
+    footer { text-align: center; color: #677084; padding: 40px 1rem; font-size: .95rem; border-top: 1px solid var(--border); background: #fff; }
+
+    /* Responsive */
+    @media (max-width: 900px) { .grid-2, .quick { grid-template-columns: 1fr; } }
+
+    /* Motion reduce */
+    @media (prefers-reduced-motion: reduce) { .audiowave path { animation: none; } .btn, .btn-primary, .btn-ghost { transition: none; } }
+  </style>
+</head>
+<body>
+  <div id="progress" class="progress" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-inner">
+      <a href="#top" class="branding" aria-label="ON-EAR home">
+        <div class="logo"><img src="Logo_v3.png" alt="ON-EAR logo"></div>
+        <div class="title">
+          <div class="name"><span class="on">ON-</span><span class="ear">EAR</span></div>
+          <div class="tag">Ontario Network for Emerging Auditory Research</div>
+        </div>
+      </a>
+      <nav aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#event">Event</a>
+        <a href="program.html">Program</a>
+        <a href="#register">Register</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <svg class="audiowave" viewBox="0 0 1000 160" aria-hidden="true">
+      <defs>
+        <linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#292C77"/>
+          <stop offset="100%" stop-color="#F9A030"/>
+        </linearGradient>
+      </defs>
+      <path stroke="url(#waveGrad)" d="M0 80 C 60 20, 120 140, 180 80 S 300 20, 360 80 S 480 140, 540 80 S 660 20, 720 80 S 840 140, 900 80 S 960 20, 1000 80"/>
+      <path stroke="url(#waveGrad)" opacity="0.35" d="M0 95 C 80 40, 160 140, 240 95 S 400 40, 480 95 S 640 140, 720 95 S 880 40, 1000 95"/>
+    </svg>
+    <div class="container inner">
+      <span class="pill">Auditory science across Ontario</span>
+      <h1>Welcome to ON-EAR</h1>
+      <p class="lede">A dynamic network connecting Ontario’s brightest minds in hearing, sound, and auditory science.</p>
+      <div class="cta-row">
+        <a href="#register" class="btn btn-primary">Join the 2025 Research Day</a>
+      </div>
+      <div class="quick" aria-label="Key facts">
+        <div class="chip"><strong>Dec 5, 2025</strong><div>Research Day</div></div>
+        <div class="chip"><strong>TMU</strong><div>Toronto Metropolitan University</div></div>
+        <div class="chip"><strong>Talks and posters</strong></div>
+      </div>
+    </div>
+    <div class="hero-divider" aria-hidden="true"></div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="block">
+    <div class="container">
+      <article class="card">
+        <h2>About ON-EAR</h2>
+        <p>ON-EAR is a new initiative created to connect and showcase the growing body of auditory research in Ontario. Building on the Toronto Auditory Research Group (TARG) and organized by the Toronto Metropolitan Auditory Research Cluster (TMARC), our goal is to foster collaboration, knowledge exchange, and community among auditory scientists and trainees across the province.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Event and Register -->
+  <section id="event" class="block">
+    <div class="container grid-2">
+      <article class="card">
+        <h2>2025 ON-EAR Research Presentation Day</h2>
+        <p><strong>Date:</strong> December 5, 2025<br>
+        <strong>Location:</strong> Toronto Metropolitan University<br>
+        <strong>Theme:</strong> Auditory Neuroscience Today: Sound, Speech, and the Brain</p>
+        <p>We welcome short talks from faculty and postdocs, and posters from trainees.</p>
+        <!-- View program button removed -->
+      </article>
+      <article class="card" id="register">
+        <h2>Register to Attend</h2>
+        <p>Be part of ON-EAR's inaugural event. Share your work, meet other researchers, and discover what is happening in auditory neuroscience across Ontario.</p>
+        <a href="register.html" class="btn btn-primary">Register now</a>
+        <p><strong>Deadline:</strong> September 1, 2025</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="block">
+    <div class="container">
+      <article class="card">
+        <h2>Contact</h2>
+        <p>Questions? Reach out to the TMARC team at <a href="mailto:tmarc@torontomu.ca" style="color: var(--blue); text-decoration: underline;">tmarc@torontomu.ca</a>.</p>
+        <p>For more information on TMARC, please visit our website: <a href="https://psychlabs.torontomu.ca/tmarc/" target="_blank" rel="noopener" style="color: var(--yellow); font-weight:600; text-decoration: underline;">here</a></p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">&copy; 2025 ON-EAR. All rights reserved.</div>
+  </footer>
+
+  <script>
+    // Progress line and header shadow
+    const progress = document.getElementById('progress');
+    const headerEl = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+      const st = document.documentElement.scrollTop || document.body.scrollTop;
+      const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      progress.style.width = Math.min(100, (st / h) * 100) + '%';
+      headerEl.style.boxShadow = st > 6 ? '0 6px 24px rgba(17,19,26,0.08)' : 'none';
+    });
+
+    // Active nav highlighting
+    const sections = document.querySelectorAll('section.block');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = '#' + entry.target.id;
+        const link = document.querySelector(`nav a[href="${id}"]`);
+        if (link) link.classList.toggle('active', entry.isIntersecting && entry.intersectionRatio > 0.5);
+      });
+    }, { threshold: 0.55 });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>

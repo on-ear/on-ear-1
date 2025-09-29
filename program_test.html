@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ON-EAR | Program</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#292C77">
+  <style>
+    :root {
+      --blue: #292C77;
+      --yellow: #F9A030;
+      --ink: #11131a;
+      --muted: #5f667a;
+      --bg: #ffffff;
+      --soft: #f7f8fb;
+      --border: #e8eaf1;
+      --radius: 18px;
+      --shadow: 0 8px 24px rgba(17,19,26,0.06);
+      --shadow-strong: 0 16px 42px rgba(17,19,26,0.10);
+      --gradient: linear-gradient(135deg, #292C77 0%, #F9A030 100%);
+      --card-transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    *{box-sizing:border-box;} html,body{height:100%;}
+    body{margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:radial-gradient(1200px 600px at 10% -10%, #eef0ff 0%, transparent 55%),radial-gradient(900px 500px at 110% 0%, #fff6e6 0%, transparent 60%),var(--bg);overflow-x:hidden;scroll-behavior:smooth;}
+    .container{width:min(900px,92vw);margin:0 auto;position:relative;z-index:1;}
+    header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);transition:box-shadow .2s ease;}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px;}
+    .branding{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;}
+    .logo img{height:56px;width:auto;display:block;border-radius:10px;box-shadow:0 4px 14px rgba(17,19,26,0.08);}
+    .title{display:grid;}
+    .title .name{font-weight:800;letter-spacing:.2px;font-size:1.55rem;line-height:1.05;}
+    .on{color:var(--blue);} .ear{color:var(--yellow);} .tag{color:var(--muted);font-size:.95rem;}
+    nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+    nav a{position:relative;text-decoration:none;color:var(--blue);font-weight:600;padding:10px 14px;border-radius:12px;}
+    nav a::after{content:"";position:absolute;left:50%;right:50%;bottom:6px;height:2px;background:var(--gradient);transition:left .2s,right .2s;}
+    nav a:hover{background:#eef0ff;} nav a:hover::after,nav a.active::after{left:14px;right:14px;}
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    @keyframes float { 0% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } 100% { transform: translateY(0) scale(1); } }
+    .progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--gradient);z-index:60;box-shadow:0 2px 20px rgba(249,160,48,0.25);}    
+    .btn{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);cursor:pointer;padding:13px 18px;border-radius:14px;font-weight:700;font-size:1rem;text-decoration:none;transition:transform 120ms ease,box-shadow 200ms ease,filter 120ms ease;}
+    .btn-primary{background:#F9A030;color:#1a1a1a;box-shadow:var(--shadow);} .btn-primary:hover{background:#e18d00;transform:translateY(-1px);box-shadow:var(--shadow-strong);}
+    .btn-ghost{background:#fff;color:var(--blue);box-shadow:var(--shadow);} .btn-ghost:hover{transform:translateY(-1px);box-shadow:var(--shadow-strong);}    
+    section.block{padding:70px 0;}
+    .card{position:relative;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:26px;color:#2b3150;box-shadow:var(--shadow);overflow:hidden;}
+    .card h2{display:inline-flex;align-items:center;gap:10px;margin:0 0 12px;font-size:clamp(1.6rem,2.8vw,2rem);color:var(--blue);} .card h2::before{content:"";height:10px;width:28px;border-radius:6px;background:var(--gradient);} .card p{font-size:1.05rem;line-height:1.7;}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+    /* Location composite card */
+    .location-wrap{display:grid;grid-template-columns:260px 1fr;gap:26px;align-items:center;}
+    .location-wrap img{width:100%;height:180px;object-fit:cover;border-radius:16px;box-shadow:0 4px 20px rgba(17,19,26,0.15),0 0 28px 4px #F9A03033;border:4px solid #fff;}
+    .location-wrap a.map{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:var(--gradient);color:#fff;text-decoration:none;font-weight:600;border-radius:10px;padding:8px 14px;box-shadow:var(--shadow);font-size:.9rem;}
+    .location-wrap a.map:hover{filter:brightness(1.05);box-shadow:var(--shadow-strong);}
+    @media(max-width:900px){.grid-2{grid-template-columns:1fr;} .location-wrap{grid-template-columns:1fr;}}
+    @media(max-width:600px){section.block{padding:56px 0;} .card{padding:22px;} .location-wrap img{height:200px;} .title .name{font-size:1.4rem;}}
+    footer{text-align:center;color:#677084;padding:40px 1rem;font-size:.95rem;border-top:1px solid var(--border);background:#fff;}
+  </style>
+</head>
+<body>
+  <div id="progress" class="progress" aria-hidden="true"></div>
+  <header>
+    <div class="container header-inner">
+      <a href="index.html" class="branding" aria-label="ON-EAR home">
+        <div class="logo"><img src="Logo_v3.png" alt="ON-EAR logo"></div>
+        <div class="title"><div class="name"><span class="on">ON-</span><span class="ear">EAR</span></div><div class="tag">Ontario Network for Emerging Auditory Research</div></div>
+      </a>
+      <nav aria-label="Primary">
+        <a href="index.html#about">About</a>
+        <a href="index.html#event">Event</a>
+        <a href="program.html" class="active">Program</a>
+        <a href="index.html#register">Register</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <!-- Program Overview --> 
+  <section class="block" id="program-intro">
+    <div class="container">
+      <article class="card">
+        <div style="text-align:center;margin:-26px -26px 32px;padding:48px 26px;background:var(--gradient);border-radius:var(--radius) var(--radius) 0 0;position:relative;overflow:hidden;">
+          <!-- Animated gradients -->
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(41,44,119,0.7), rgba(249,160,48,0.5));"></div>
+          <div style="position:absolute;inset:0;background:radial-gradient(800px circle at 70% 50%, rgba(249,160,48,0.15), transparent);"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(20deg, rgba(41,44,119,0.1), transparent);"></div>
+          
+          <!-- Content -->
+          <div style="position:relative;max-width:720px;margin:0 auto;">
+            <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+              <div style="flex:1;min-width:280px;max-width:400px;">
+                <span style="display:inline-block;background:rgba(249,160,48,0.15);padding:4px 12px;border-radius:12px;color:white;font-size:0.9rem;margin-bottom:12px;backdrop-filter:blur(10px);border:1px solid rgba(249,160,48,0.25);font-weight:600;letter-spacing:0.3px;">December 5, 2025</span>
+                <h1 style="margin:0 0 12px;color:white;font-size:clamp(1.8rem,3vw,2.2rem);font-weight:700;line-height:1.2;text-shadow:0 2px 8px rgba(0,0,0,0.15);letter-spacing:-0.3px;">2025 Program Schedule</h1>
+              </div>
+              <div style="flex:1;min-width:280px;max-width:400px;text-align:left;padding-left:20px;border-left:2px solid rgba(249,160,48,0.3);">
+                <div style="color:rgba(255,255,255,0.9);font-size:0.9rem;line-height:1.5;">
+                  <strong style="color:var(--yellow);font-weight:500;display:block;margin-bottom:4px;">Theme</strong>
+                  Auditory Neuroscience Today:<br>Sound, Speech, and the Brain
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Location Card -->
+        <div style="background:white;margin:-16px 0 24px;padding:24px;border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow);">
+          <div style="display:flex;gap:20px;align-items:center;">
+            <img src="CIUTMU.jpg" alt="Centre for Urban Innovation, TMU" style="width:120px;height:120px;object-fit:cover;border-radius:10px;box-shadow:0 4px 14px rgba(17,19,26,0.08);">
+            <div>
+              <div style="font-weight:600;color:var(--blue);margin-bottom:8px;font-size:1.1rem;">Centre for Urban Innovation</div>
+              <div style="color:var(--muted);line-height:1.5;">
+                Toronto Metropolitan University<br>
+                44 Gerrard St E<br>
+                Toronto, ON M5B 1G3
+              </div>
+              <a href="https://www.google.com/maps/place/44+Gerrard+St+E,+Toronto,+ON+M5B+1W7/@43.6598316,-79.382323,17z/data=!3m1!4b1!4m6!3m5!1s0x89d4cb4acf49d9d7:0x194eefedbcff4054!8m2!3d43.6598277!4d-79.3797427!16s%2Fg%2F1yfdrvpm5?entry=ttu" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:var(--gradient);color:#fff;text-decoration:none;font-weight:500;border-radius:8px;padding:6px 12px;font-size:0.9rem;box-shadow:0 2px 6px rgba(41,44,119,0.2);transition:all 0.2s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(41,44,119,0.3)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 6px rgba(41,44,119,0.2)'">View on Map</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Registration & Setup -->
+        <div style="background:var(--soft);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin:16px 0;box-shadow:var(--shadow);position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(1000px circle at 0% 0%, rgba(74,93,155,0.03), transparent);animation:float 15s ease-in-out infinite;"></div>
+          <div style="position:absolute;inset:0;background:radial-gradient(800px circle at 100% 100%, rgba(249,160,48,0.03), transparent);animation:float 12s ease-in-out infinite reverse;"></div>
+          <h3 style="margin:0 0 24px;font-size:1.5rem;display:flex;align-items:center;gap:16px;position:relative;">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="color:var(--ink);font-weight:800;font-size:1.4rem;letter-spacing:-0.3px;display:flex;align-items:center;gap:12px;">
+                <span>Registration & Setup</span>
+                <div style="height:3px;width:24px;background:var(--gradient);border-radius:2px;"></div>
+              </div>
+              <div style="color:var(--blue);font-size:1.05rem;font-weight:600;letter-spacing:0.3px;margin-top:4px;">9:00 - 10:00</div>
+            </div>
+          </h3>
+          <div style="line-height:1.6;">
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 12px;background:#eef0ff;border-radius:8px;transition:var(--card-transition);border:1px solid rgba(41,44,119,0.1);">9:00 - 10:00</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Registration & Poster Setup</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Morning Sessions -->
+        <div style="background:var(--soft);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin:16px 0;box-shadow:var(--shadow);position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(1000px circle at 0% 0%, rgba(74,93,155,0.03), transparent);animation:float 15s ease-in-out infinite;"></div>
+          <div style="position:absolute;inset:0;background:radial-gradient(800px circle at 100% 100%, rgba(249,160,48,0.03), transparent);animation:float 12s ease-in-out infinite reverse;"></div>
+          <h3 style="margin:0 0 24px;font-size:1.5rem;display:flex;align-items:center;gap:16px;position:relative;">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="color:var(--ink);font-weight:800;font-size:1.4rem;letter-spacing:-0.3px;display:flex;align-items:center;gap:12px;">
+                <span>Morning Sessions</span>
+                <div style="height:3px;width:24px;background:var(--gradient);border-radius:2px;"></div>
+              </div>
+              <div style="color:var(--blue);font-size:1.05rem;font-weight:600;letter-spacing:0.3px;margin-top:4px;">10:00 - 12:25</div>
+            </div>
+          </h3>
+          <div style="line-height:1.6;">            
+            <div style="margin:24px 0 12px;font-weight:600;color:var(--ink);font-size:1rem;">Opening Remarks</div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 12px;background:#eef0ff;border-radius:8px;transition:var(--card-transition);border:1px solid rgba(41,44,119,0.1);">10:00 - 10:10</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Opening Remarks</div>
+            </div>
+            
+            <div style="margin:24px 0 12px;font-weight:600;color:var(--ink);font-size:1rem;">Session 1 (10:15 - 11:11)</div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">10:10 - 10:30</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Effects of older age and age-related hearing loss on dual-task listening-while-driving</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Jennifer Campos (KITE - University Health Network)</div>
+            </div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">10:30 - 10:50</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">fNIRS as a tool to study listening effort in older adults</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Maxime Perron (Toronto Metropolitan University)</div>
+            </div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">10:50 - 11:10</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">How individual differences in cognition support speech perception in noise</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Ingrid Johnsrude (Western University)</div>
+            </div>
+            
+            <div style="margin:24px 0 12px;font-weight:600;color:var(--ink);font-size:1rem;">Break</div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">11:10 - 11:25</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Coffee Break</div>
+            </div>
+            
+            <div style="margin:24px 0 12px;font-weight:600;color:var(--ink);font-size:1rem;">Session 2 (11:25 - 12:25)</div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">11:25 - 11:45</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Differential reliance on sensory reinstatement and internally transformed representation during vivid retrieval of visual and auditory episodes</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Lei Zhang (Rotman Research Institute)</div>
+            </div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">11:45 - 12:05</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Hearing loss and conversation success</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Brandon Paul (Toronto Metropolitan University)</div>
+            </div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">12:05 - 12:25</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Neural tracking of speech in infancy</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Holly Bradley (University of Toronto)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lunch & Poster Session -->
+        <div style="background:var(--soft);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin:32px 0;box-shadow:var(--shadow);">
+          <h3 style="margin:0 0 24px;font-size:1.5rem;">Lunch & Poster Session</h3>
+          <div style="color:var(--muted);line-height:1.6;">
+            <div style="margin:8px 0;"><strong>12:30 - 2:00</strong> Student & Trainee Poster Presentations</div>
+            <div style="margin:8px 0; padding-left:20px;">• Lunch provided during poster session</div>
+            <div style="margin:8px 0; padding-left:20px;">• Poster awards will be announced at closing</div>
+            <div style="margin:24px 0 8px;">
+              <button onclick="showPosterList()" style="background:#F9A030;color:#1a1a1a;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-size:0.95rem;font-weight:500;transition:all 0.2s;box-shadow:0 2px 6px rgba(249,160,48,0.2);" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(249,160,48,0.3)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 6px rgba(249,160,48,0.2)'">View Posters</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="posterList" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;justify-content:center;align-items:center;">
+          <div style="background:white;padding:32px;margin:20px;border-radius:12px;max-width:900px;width:95%;max-height:90vh;position:relative;box-shadow:0 4px 20px rgba(0,0,0,0.15);display:flex;flex-direction:column;">
+            <button onclick="hidePosterList()" style="position:absolute;right:16px;top:16px;border:none;background:none;font-size:24px;cursor:pointer;color:#666;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background='transparent'">&times;</button>
+            
+            <div style="margin-bottom:24px;">
+              <h3 style="margin:0 0 8px 0;color:#292C77;font-size:1.5rem;">Poster Presentations</h3>
+              <div style="color:#666;font-size:0.9rem;" id="posterCount"></div>
+            </div>
+
+            <div style="margin-bottom:24px;">
+              <input type="text" id="posterSearch" placeholder="Search posters by title, author, or affiliation..." style="width:100%;padding:12px 16px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem;outline:none;transition:all 0.2s;" oninput="searchPosters(this.value)" onfocus="this.style.borderColor='#292C77'" onblur="this.style.borderColor='#ddd'">
+            </div>
+
+            <div id="posters" style="overflow-y:auto;flex:1;padding-right:16px;">
+              <!-- Posters will be inserted here -->
+            </div>
+          </div>
+        </div>
+
+        <script>
+          const posters = [
+            {
+              title: "Developing brain-based models of speech emotion perception in young adults with hearing loss",
+              authors: "Tikhostoup, K., Dang, C., & Russo, F. A.",
+              affiliation: "SMART Lab - Toronto Metropolitan University",
+              presenting: "Katya Tikhostoup"
+            },
+            {
+              title: "The behavioural and neural effect of hearing acuity and hearing aids on speech emotion perception using functional near-infrared spectroscopy",
+              authors: "Dang, C., Zara, M., & Russo, F. A.",
+              affiliation: "SMART Lab - Toronto Metropolitan University",
+              presenting: "Carmen Dang"
+            },
+            {
+              title: "The neural dynamics of musical reward: An fNIRS study on repeated music exposure",
+              authors: "Glassman, H., & Russo, F. A.",
+              affiliation: "Toronto Metropolitan University",
+              presenting: "Harley Glassman"
+            },
+            {
+              title: "Musical training mitigates age-related declines in MMN and memory precision",
+              authors: "Chow, R.",
+              affiliation: "York University; Baycrest - Rotman Research Institute",
+              presenting: "Ricky Chow"
+            },
+            {
+              title: "Social bonding in joint-humming: The role of inter-brain coherence and harmonicity",
+              authors: "Lohin, J., & Russo, F. A.",
+              affiliation: "Toronto Metropolitan University",
+              presenting: "Jennifer Lohin"
+            },
+            {
+              title: "Masking of speaker facial features during audiovisual speech perception in older adults with hearing loss",
+              authors: "Aguiar, P. V., Preman, J., & Paul, B. T.",
+              affiliation: "Toronto Metropolitan University",
+              presenting: "Patricia Aguiar"
+            },
+            {
+              title: "Conversation dynamics among older adults with age-related hearing loss (ARHL)",
+              authors: "Salehi, N., & Paul, B. T.",
+              affiliation: "Toronto Metropolitan University",
+              presenting: "Negar Salehi"
+            },
+            {
+              title: "The effects of a music listening intervention on autobiographical memory: Evidence from oscillatory brain activity",
+              authors: "Vuong, V., O'Neil, M. J., Dimitrijevic, A., Buchsbaum, B. R., Thaut, M. H., & Alain, C.",
+              affiliation: "University of Toronto; Baycrest - Rotman Research Institute",
+              presenting: "Veronica Vuong"
+            },
+            {
+              title: "Neural indices of naturalistic speech comprehension in cochlear implant users",
+              authors: "Mo, S. (Mello)",
+              affiliation: "Baycrest - Rotman Research Institute; Sunnybrook Research Institute",
+              presenting: "Shimin (Mello) Mo"
+            },
+            {
+              title: "Leveraging EEG to assess speech processing and specific cognitive impairment in older adults with age-related hearing loss",
+              authors: "Jani, S.",
+              affiliation: "University of Toronto, Department of Psychology; Baycrest - Rotman Research Institute",
+              presenting: "Sara Jani"
+            },
+            {
+              title: "Investigating the impact of cochlear morphology on outcomes in cochlear implant recipients using post-operative scans",
+              authors: "Micuda, A., Skidmore, J., Dennison, S., Felder, J., Paroby, C., Agrawal, S.*, Stohl, J.*, & Ladak, H.* (*Co-senior)",
+              affiliation: "Western University",
+              presenting: "Ashley Micuda"
+            },
+            {
+              title: "Effects of binaural beats on memory encoding",
+              authors: "O'Neil, M., Perron, M., Paracha, M. J., & Alain, C.",
+              affiliation: "Baycrest - Rotman Research Institute",
+              presenting: "Mary O'Neil"
+            },
+            {
+              title: "Biophysical basis of the Greenwood function in cochlear mechanics",
+              authors: "Shakourifar, N.",
+              affiliation: "Western University, Department of Biomedical Engineering",
+              presenting: "Nastaran Shakourifar"
+            },
+            {
+              title: "Revealing the architecture of hearing: Micro-CT and statistical shape modeling of the human inner ear",
+              authors: "Spedaliere, C., Rohani, S. A., Agrawal, S. K., & Ladak, H. M.",
+              affiliation: "Western University, Schulich School of Medicine & Dentistry",
+              presenting: "Carmine Spedaliere"
+            },
+            {
+              title: "A novel dual task combining speech-in-noise and spatial navigation to detect early cognitive changes in older adults with hearing loss or subjective cognitive decline",
+              authors: "Montanari, L.",
+              affiliation: "University of Toronto; KITE Research Institute - UHN",
+              presenting: "Lianna Montanari"
+            },
+            {
+              title: "Not sure yet!",
+              authors: "Wu, X.",
+              affiliation: "University of Toronto",
+              presenting: "Xiaotong Wu"
+            },
+            {
+              title: "Perceptual organization and encoding of narrative events in effortful listening conditions",
+              authors: "Panela, R. A.",
+              affiliation: "University of Toronto; Baycrest - Rotman Research Institute",
+              presenting: "Ryan Aaron Panela"
+            },
+            {
+              title: "How eye movements relate to mental imagery during speech comprehension in challenging auditory environments",
+              authors: "Mariotti, G.",
+              affiliation: "University of Toronto; Baycrest - Rotman Research Institute",
+              presenting: "Geneva Mariotti"
+            },
+            {
+              title: "The influence of attention on narrative lingering in speech-on-speech listening",
+              authors: "Pandey, P. R., & Herrmann, B.",
+              affiliation: "University of Toronto; Baycrest - Rotman Research Institute",
+              presenting: "Priya Rakesh Pandey"
+            },
+            {
+              title: "Discovering regenerative signatures in the human hearing organ during development",
+              authors: "Luca, E.",
+              affiliation: "Sunnybrook Research Institute",
+              presenting: "Emilia Luca"
+            },
+            {
+              title: "The cognitive contributions to listening effort and related perceptions in younger and older adults",
+              authors: "Rovetti, J.",
+              affiliation: "Western University",
+              presenting: "Joseph Rovetti"
+            },
+            {
+              title: "Psychoacoustic and cognitive predictors of sound sensitivity in healthy young adults",
+              authors: "Krygsman, B.",
+              affiliation: "Trent University",
+              presenting: "Breann Krygsman"
+            },
+            {
+              title: "From hearing loss to hearing aids: Effects on emotional speech processing and perception",
+              authors: "Karimi-Boroujeni, M.",
+              affiliation: "University of Ottawa, School of Rehabilitation Sciences",
+              presenting: "Maryam Karimi-Boroujeni"
+            },
+            {
+              title: "Neural mechanisms of prosodic feature processing in cochlear implant users during emotion and gender discrimination",
+              authors: "Yao, X.",
+              affiliation: "University of Toronto",
+              presenting: "Xinyi Yao"
+            },
+            {
+              title: "The aging musician advantage on listening effort",
+              authors: "Riopelle, W.",
+              affiliation: "Trent University",
+              presenting: "Will Riopelle"
+            }
+          ];
+
+          function renderPosters(filteredPosters = posters) {
+            const posterDiv = document.getElementById('posters');
+            if (!posterDiv) return;
+            
+            posterDiv.innerHTML = filteredPosters.map((poster, index) => `
+              <div class="poster-card" style="margin-bottom:24px;padding:24px;border:1px solid #eee;border-radius:12px;transition:all 0.2s;background:white;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';this.style.borderColor='#292C77'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='#eee'">
+                <div style="display:flex;gap:20px;align-items:flex-start;">
+                  <div style="background:linear-gradient(135deg, #292C77, #4A5D9B);color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0;box-shadow:0 2px 6px rgba(41,44,119,0.2);">${index + 1}</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;color:#292C77;margin-bottom:12px;font-size:1.15rem;line-height:1.4;">${poster.title}</div>
+                    <div style="color:#444;margin-bottom:8px;font-size:0.95rem;"><strong style="color:#292C77">Authors:</strong> ${poster.authors}</div>
+                    <div style="color:#444;margin-bottom:8px;font-size:0.95rem;"><strong style="color:#292C77">Affiliation:</strong> ${poster.affiliation}</div>
+                    <div style="color:#444;font-size:0.95rem;"><strong style="color:#292C77">Presenting:</strong> ${poster.presenting}</div>
+                  </div>
+                </div>
+              </div>
+            `).join('');
+
+            // Update poster count
+            const countDiv = document.getElementById('posterCount');
+            if (countDiv) {
+              const total = posters.length;
+              const filtered = filteredPosters.length;
+              countDiv.textContent = filtered === total 
+                ? `Showing all ${total} posters`
+                : `Showing ${filtered} of ${total} posters`;
+            }
+          }
+
+          function searchPosters(query) {
+            query = query.toLowerCase();
+            const filtered = posters.filter(poster => 
+              poster.title.toLowerCase().includes(query) ||
+              poster.authors.toLowerCase().includes(query) ||
+              poster.affiliation.toLowerCase().includes(query) ||
+              poster.presenting.toLowerCase().includes(query)
+            );
+            renderPosters(filtered);
+          }
+
+          function showPosterList() {
+            const list = document.getElementById('posterList');
+            if (!list) return;
+            list.style.display = 'flex';
+            
+            // Clear any existing search
+            const search = document.getElementById('posterSearch');
+            if (search) search.value = '';
+            
+            // Render all posters
+            renderPosters();
+          }
+
+          function hidePosterList() {
+            const list = document.getElementById('posterList');
+            if (list) {
+              list.style.display = 'none';
+              // Clear search when closing
+              const search = document.getElementById('posterSearch');
+              if (search) search.value = '';
+            }
+          }
+
+          // Setup event listeners
+          document.addEventListener('DOMContentLoaded', function() {
+            // Prevent clicking inside modal from closing it
+            const modalContent = document.querySelector('#posterList > div');
+            if (modalContent) {
+              modalContent.addEventListener('click', function(e) {
+                e.stopPropagation();
+              });
+            }
+
+            // Close modal when clicking outside
+            const modal = document.getElementById('posterList');
+            if (modal) {
+              modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                  hidePosterList();
+                }
+              });
+            }
+
+            // Handle escape key
+            document.addEventListener('keydown', function(e) {
+              if (e.key === 'Escape') {
+                hidePosterList();
+              }
+            });
+          });
+
+          // Initialize modal functionality
+          window.openPosterModal = function() {
+            const modal = document.getElementById('posterModal');
+            if (modal) {
+              renderPosters();
+              modal.style.display = 'flex';
+              const search = document.getElementById('posterSearch');
+              if (search) search.focus();
+            }
+          }
+
+          window.closePosterModal = function() {
+            const modal = document.getElementById('posterModal');
+            if (modal) {
+              modal.style.display = 'none';
+              const search = document.getElementById('posterSearch');
+              if (search) search.value = '';
+            }
+          }
+
+          // Setup event listeners when the DOM is loaded
+          document.addEventListener('DOMContentLoaded', function() {
+            const search = document.getElementById('posterSearch');
+            if (search) {
+              let searchTimeout;
+              search.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                  const filtered = filterPosters(e.target.value);
+                  renderPosters(filtered);
+                }, 300);
+              });
+            }
+          });
+        </script>
+
+        <!-- Afternoon Sessions -->
+        <div style="background:var(--soft);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin:32px 0;box-shadow:var(--shadow);position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(1000px circle at 0% 0%, rgba(74,93,155,0.03), transparent);animation:float 15s ease-in-out infinite;"></div>
+          <div style="position:absolute;inset:0;background:radial-gradient(800px circle at 100% 100%, rgba(249,160,48,0.03), transparent);animation:float 12s ease-in-out infinite reverse;"></div>
+          <h3 style="margin:0 0 24px;font-size:1.5rem;display:flex;align-items:center;gap:16px;position:relative;">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="color:var(--ink);font-weight:800;font-size:1.4rem;letter-spacing:-0.3px;display:flex;align-items:center;gap:12px;">
+                <span>Afternoon Sessions</span>
+                <div style="height:3px;width:24px;background:var(--gradient);border-radius:2px;"></div>
+              </div>
+              <div style="color:var(--blue);font-size:1.05rem;font-weight:600;letter-spacing:0.3px;margin-top:4px;">2:00 - 4:00</div>
+            </div>
+          </h3>
+          <div style="line-height:1.6;">
+            <div style="margin:24px 0 12px;font-weight:600;color:var(--ink);font-size:1rem;">Session 3 (2:00 - 3:00)</div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">2:00 - 2:20</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Treating hearing loss in minority communities: A case study of the Hasidic Jewish community</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Hillary Ganek (Brock University)</div>
+            </div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">2:20 - 2:40</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">AI + Synchrotron Imaging: A New Frontier in Cochlear Implant Personalization</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Hanif Ladak (Western University)</div>
+            </div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">2:40 - 3:00</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Linking Age-Related Hyper-Excitability in Sensory Cortex to Cognitive Aging: Intensity Manipulation</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Priyanka Prince (Baycrest Academy for Research and Education)</div>
+            </div>
+            
+            <div style="margin:24px 0 12px;font-weight:600;color:var(--ink);font-size:1rem;">Break</div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">3:00 - 3:15</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Coffee Break</div>
+            </div>
+            
+            <div style="margin:24px 0 12px;font-weight:600;color:var(--ink);font-size:1rem;">Session 4 (3:15 - 4:15)</div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">3:15 - 3:35</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Event processing during listening: The relative contributions of discourse structure and prosody</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Iuliia Lamekina (Rotman Research Institute)</div>
+            </div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">3:35 - 3:55</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Attentional disengagement during external and internal distractions reduces neural speech tracking in background noise</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Yue Ren (Baycrest Academy for Research and Education)</div>
+            </div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">3:55 - 4:15</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Rhythmicity in speech and song benefits comprehension and neural tracking</div>
+              <div style="color:var(--blue);margin-top:4px;font-size:0.95rem;">Anna Czepiel (University of Toronto Mississauga)</div>
+            </div>
+            
+            <div style="margin:24px 0 12px;font-weight:600;color:var(--ink);font-size:1rem;">Closing</div>
+            <div class="session-card" style="background:white;margin:8px 0;padding:16px 20px;border-radius:var(--radius);border:1px solid var(--border);transition:var(--card-transition);cursor:pointer;position:relative;overflow:hidden;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-hover)';this.style.borderColor='var(--blue)'" onmouseout="this.style.transform='none';this.style.boxShadow='none';this.style.borderColor='var(--border)'">
+              <div style="position:absolute;inset:0;background:var(--gradient);opacity:0;transition:var(--card-transition);" onmouseover="this.style.opacity='0.02'" onmouseout="this.style.opacity='0'"></div>
+              <div style="color:var(--blue);font-size:0.9rem;font-weight:500;margin-bottom:6px;display:inline-block;padding:4px 10px;background:var(--soft);border-radius:6px;transition:var(--card-transition);">4:15 - 4:30</div>
+              <div style="color:var(--ink);margin-top:8px;font-weight:600;">Awards & Closing Remarks</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spacer for bottom margin -->
+        <div style="height:20px;"></div>
+      </article>
+    </div>
+  </section>
+  <footer>
+    <div class="container">&copy; 2025 ON-EAR. All rights reserved.</div>
+  </footer>
+  <script>
+    const progress=document.getElementById('progress');const headerEl=document.querySelector('header');window.addEventListener('scroll',()=>{const st=document.documentElement.scrollTop||document.body.scrollTop;const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;progress.style.width=Math.min(100,(st/h)*100)+'%';headerEl.style.boxShadow=st>6?'0 6px 24px rgba(17,19,26,0.08)':'none';});
+  </script>
+</body>
+</html>
